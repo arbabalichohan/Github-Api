@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+.links a.nav-link:hover{
+ background: lightgrey!important;
+ 
+
+}
+.links a.nav-link{
+  display: inline-block;
+  width: 100%;
+}
+.myalert{
+  position: absolute;
+  z-index: 10000;
+  right: 10px;
+  bottom: 0;
+  min-width: 300px;
+  max-width: 500px;
+
+}
