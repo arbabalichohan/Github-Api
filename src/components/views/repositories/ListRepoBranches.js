@@ -5,23 +5,22 @@ import Success from "../../alert/Success";
 import ShowRepo from "./ShowRepo";
 import {Link} from 'react-router-dom'; 
 
-const ListRepoBranches = () => {
+const ListRepoBranches = ({authorization}) => {
     
 
     const [repo, setRepo] = useState('');
     const [isPending, setIsPending] = useState(true);
-    const [projs, setProjs] = useState(null);
+    const [branches, setBranches] = useState(null);
 
     const url = ('https://api.github.com/repos/arbabalichohan/' + repo + '/branches');
     const headers = {
-        'Authorization': 'token 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',
+        'Authorization': authorization,
         'Accept': 'application/vnd.github.v3+json'
     };
     const HandleClick = () => {
         //const {data: projs, error, isPending} = useFetch(url);
         fetch(url, {
-            method: 'GET',
-            headers: headers
+            method: 'GET'
           })
             .then(res => {
               if (!res.ok){
@@ -30,7 +29,7 @@ const ListRepoBranches = () => {
               return res.json();
             }).then((data) => {
                 setIsPending(false);
-                setProjs(data);
+                setBranches(data);
             //   setError(null);
                 console.log(data);
             }).catch(err => {
@@ -59,9 +58,9 @@ const ListRepoBranches = () => {
                 !isPending &&
                 <div className="">
                     <h2 className="bg-secondary text-light py-3">Repositories</h2>
-                    {projs && projs.map(repo => (
-                        <div className="border text-start py-2 px-3" key={repo.id}>
-                            <Link to="/">{repo.name}</Link>
+                    {branches && branches.map(branch => (
+                        <div className="border text-start py-2 px-3" key={branch.name}>
+                            <Link to="/">{branch.name}</Link>
                         </div>
                     ))}
                 </div>

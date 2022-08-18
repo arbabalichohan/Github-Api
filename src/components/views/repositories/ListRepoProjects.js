@@ -14,7 +14,7 @@ const ListRepoProjects = () => {
 
     const url = ('https://api.github.com/repos/arbabalichohan/' + repo + '/projects');
     const headers = {
-        'Authorization': 'token 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',
+        'Authorization': 'token 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',
         'Accept': 'application/vnd.github.v3+json'
     };
     const HandleClick = () => {

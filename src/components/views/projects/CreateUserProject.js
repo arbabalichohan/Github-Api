@@ -1,27 +1,26 @@
 import { useState } from "react";
 import Success from "../../alert/Success";
 
-const CreateRepoProject = ({authorization}) => {
+const CreateUserProject = ({authorization}) => {
     
-    const [repo, setRepo] = useState('');
+    const [proj, setProj] = useState('');
     const [message, setMessage] = useState(null);
-    const url = 'https://api.github.com/repos/' + 'arbabalichohan' + '/'+ repo + '/projects';
     const HandleSubmit = (e) => {
         e.target.disabled = true;
-        console.log(authorization);
+        const url = "https://api.github.com/user/projects";
         fetch(url, {
                         method: 'POST', // or ‘PUT’
                         headers: {
                             'Authorization': authorization,
-                            'Accept': 'application/vnd.github.v3+json'
+                            'Accept': 'application/vnd.github.v3+json' 
                         },
                         body: JSON.stringify({
-                            'name': 'hello11'
+                            'name': proj
                         })
                     })
                     .then(function(res){
                         if (res.status === 201){
-                            setMessage("The repository was created successfully!");
+                            setMessage("The projsitory was created successfully!");
                             e.target.disabled = false;
                         }else{
                             setMessage("Oops there was an error!");
@@ -36,10 +35,10 @@ const CreateRepoProject = ({authorization}) => {
     
     return ( 
         <div className="" onSubmit={(e)=>{e.preventDefault();}}>
-            <h1 className="mb-5">Create Repository</h1>
+            <h1 className="mb-5">Create projsitory</h1>
             <form action="">
                 <div className="for-group mb-4">
-                    <input type="text" className="form-control" placeholder="Repository name" value={repo} onChange={(e)=>{setRepo(e.target.value)}}/>
+                    <input type="text" className="form-control" placeholder="Project name" value={proj} onChange={(e)=>{setProj(e.target.value)}}/>
                 </div>
                 <div className="form-group">
                     <button className="btn btn-success form-control" id="submit" onClick={(e) => HandleSubmit(e)}>Create</button>
@@ -50,4 +49,4 @@ const CreateRepoProject = ({authorization}) => {
      );
 }
  
-export default CreateRepoProject;
+export default CreateUserProject;
