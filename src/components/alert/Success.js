@@ -1,4 +1,4 @@
-const Success = ({message}) => {
+function Success({message}){
     return (
         <div className="alert alert-success alert-dismissible fade show myalert" role="alert">
              {message}

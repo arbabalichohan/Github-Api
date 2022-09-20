@@ -3,7 +3,6 @@ import MyNav from './components/layout/MyNav';
 import Button from 'react-bootstrap/Button';
 
 import {
-  Link,
   BrowserRouter as Router,
   Route,
   Routes
@@ -23,26 +22,29 @@ import ListUserProjects from './components/views/projects/ListUserProjects';
 import Results from './components/views/Results';
 
 function App() {
-  const url = ('https://api.github.com/user/repos');
-  const authorization = ('token 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');
-  const username = {{USERNAME}};
+  const username = "{{USERNAME}}";
+  const headers = {
+    'Authorization': 'token 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',
+    'Accept': 'application/vnd.github.v3+json'
+  };
+
   return (
     <Router>
-      <MyNav />
-      <div className="container py-5 text-center col col-6">
+      <MyNav header={headers}/>
+      <div className="container py-5 text-center col mx-5 col-8 mx-auto">
         <Routes>
             <Route exact path="/" element={<Home />}></Route>
-            <Route exact path="/repository/create" element={<CreateRepo url={url} authorization={authorization}/>}></Route>
-            <Route exact path="/repository/edit" element={<EditRepo authorization={authorization}/>}></Route>
-            <Route exact path="/repository/delete" element={<DeleteRepo authorization={authorization} />}></Route>
-            <Route exact path="/repositories" element={<ListRepos />}></Route>
-            <Route exact path="/repository/project/create" element={<CreateRepoProject authorization={authorization} />}></Route>
-            <Route exact path="/repository/projects" element={<ListRepoProjects />}></Route>
-            <Route exact path="/repository/branches" element={<ListRepoBranches authorization={authorization}/>}></Route>
-            <Route exact path="/repository/commits" element={<ListRepoCommits />}></Route>
-            <Route exact path="/repository/collaborators" element={<ListRepoCollaborators authorization={authorization}/>}></Route>
-            <Route exact path="/user/project/create" element={<CreateUserProject authorization={authorization} />}></Route>
-            <Route exact path="/user/projects" element={<ListUserProjects authorization={authorization}/>}></Route>
+            <Route exact path="/repository/project/create" element={<CreateRepoProject headers={headers} username={username}/>}></Route>
+            <Route exact path="/repository/create" element={<CreateRepo headers={headers} username={username}/>}></Route>
+            <Route exact path="/repository/edit" element={<EditRepo headers={headers} username={username}/>}></Route>
+            <Route exact path="/repository/delete" element={<DeleteRepo headers={headers} username={username}/>}></Route>
+            <Route exact path="/repositories" element={<ListRepos headers={headers} username={username}/>}></Route>
+            <Route exact path="/repository/projects" element={<ListRepoProjects headers={headers} username={username}/>}></Route>
+            <Route exact path="/repository/branches" element={<ListRepoBranches headers={headers} username={username}/>}></Route>
+            <Route exact path="/repository/commits" element={<ListRepoCommits headers={headers} username={username}/>}></Route>
+            <Route exact path="/repository/collaborators" element={<ListRepoCollaborators headers={headers} username={username}/>}></Route>
+            <Route exact path="/user/project/create" element={<CreateUserProject headers={headers} username={username}/>}></Route>
+            <Route exact path="/user/projects" element={<ListUserProjects headers={headers} username={username}/>}></Route>
             <Route exact path="/search-results" element={<Results />}></Route>
             
         </Routes>

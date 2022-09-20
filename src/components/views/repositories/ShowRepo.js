@@ -1,7 +1,7 @@
-const ShowRepo = ({repo}) => {
+function ShowRepo ({repo}){
     return ( 
         <div className="">
-            Name: {repo.name}
+                
         </div>
      );
 }

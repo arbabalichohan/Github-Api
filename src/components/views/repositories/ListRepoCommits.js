@@ -1,67 +1,92 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import useFetch from "../../../hooks/useFetch";
-import Success from "../../alert/Success";
-import ShowRepo from "./ShowRepo";
-import {Link} from 'react-router-dom'; 
-
-const ListRepoCommits = ({authorization}) => {
+function ListRepoCommits({headers}) {
     
-
     const [repo, setRepo] = useState('');
     const [isPending, setIsPending] = useState(true);
-    const [commits, setCommits] = useState(null);
+    const [commits, setCommits] = useState('');
+    const [username, setUsername] = useState('');
+    const HandleClick = async () => {
+        const url = `https://api.github.com/repos/${username}/${repo}/commits`;
+        const options = {
+            method: 'GET',
+            headers: headers
+        };
 
-    const url = ('https://api.github.com/repos/arbabalichohan/' + repo + '/commits');
-    const headers = {
-        'Authorization': authorization,
-        'Accept': 'application/vnd.github.v3+json'
-    };
-    const HandleClick = () => {
-        //const {data: projs, error, isPending} = useFetch(url);
-        fetch(url, {
-            method: 'GET'
-          })
-            .then(res => {
-              if (!res.ok){
+        try{
+            const response = await fetch(url, options);
+            if (!response.ok){
                 throw Error("Could not fetch any data..");
-              }
-              return res.json();
-            }).then((data) => {
+            }else{
+                const result = await response.json();
+                console.log(result);
                 setIsPending(false);
-                setCommits(data);
-            //   setError(null);
-                console.log(data);
-            }).catch(err => {
-            //   if (err.name === 'AbortError'){
-            //     console.log("Fetch aborted.");
-            //   }else{
-            //     setIsPending(false);
-            //     setError(err.message);
-            //   }
-            });
+                setCommits(result);
+            }
+        }catch(err){
+
+        }
     }
     return ( 
-        <div className="" onSubmit={(e)=>{e.preventDefault();}}>
-            <h2>Repository Commits</h2>
-            <form action="" className="mb-5">
-                <div className="form-group mb-3">
-                    <input type="text" className="form-control" value={repo} onChange={(e)=>{setRepo(e.target.value);}} placeholder="Repository name" />
+        <div className="" >
+            <h2 className="mb-5">Repository Commits</h2>
+            <div className="row">
+                <div className="col col-12 mx-auto">
+                    <form action="" className="mb-5" onSubmit={(e)=>{e.preventDefault();}}>
+                        <div className="form-group mb-3">
+                            <input type="text" className="form-control" value={username} onChange={(e)=>{setUsername(e.target.value);}} placeholder="Username" />
+                        </div>
+                        <div className="form-group mb-3">
+                            <input type="text" className="form-control" value={repo} onChange={(e)=>{setRepo(e.target.value);}} placeholder="Repository name" />
+                        </div>
+                        <div className="form-group mb-3 text-start">
+                            <button className="btn btn-success" onClick={()=>{
+                                HandleClick();
+                            }}>Show</button>
+                        </div>
+                    </form>
                 </div>
-                <div className="form-group mb-3 text-start">
-                    <button className="btn btn-success" onClick={()=>{
-                        HandleClick();
-                    }}>Show</button>
-                </div>
-            </form>
+            </div>
             {
                 !isPending &&
                 <div className="">
-                    <h2 className="bg-secondary text-light py-3">Commits</h2>
-                    {commits && commits.map(commit => (
-                        <div className="border text-start py-2 px-3" key={commit.sha}>
-                            <Link to="/">{commit.commit.message}</Link>
+                    <div className="row bg-dark text-light text-center">
+                        <div className="col col-5 py-2 px-3 border">
+                            <b>
+                                Message
+                            </b>
                         </div>
+                        <div className="col col-3 py-2 px-3 border">
+                            <b>
+                                Commiter
+                            </b>
+                        </div>
+                        <div className="col col-4 py-2 px-3 border">
+                            <b>
+                                Commit    
+                            </b>
+                        </div>
+                    </div>
+                    {commits && commits.map((commit, index) => (
+
+                        <div className="" key={commit.sha}>
+                            <div className="border text-center row">
+                                <div className="col col-5 border py-2 px-3 ">
+                                    {commit.commit.message}
+                                </div>
+                                <div className="col col-3 border py-2 px-3 ">
+                                    <pre>
+                                        {commit.commit.committer.name}                                     
+                                    </pre>
+                                </div>
+                                <div className="col col-4 border py-2 px-3 "> 
+                                    <a href={`https://github.com/${repo}/commit/${commit.sha}`} target="_blank">
+                                        Visit on Github
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
                     ))}
                 </div>
             

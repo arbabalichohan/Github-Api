@@ -6,41 +6,38 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {Link} from 'react-router-dom'; 
-import  { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-function MyNav({authorization}) {
+
+function MyNav({headers}) {
   const [search, setSearch] = useState('');
   const [result, setResult] = useState('');
   const [isPending, setIsPending] = useState(true);
   const navigate = useNavigate();
-  const HandleSearch = (e) => {
+  const HandleSearch = async (e) => {
     let text = search;
     text = text.replaceAll(' ', '+');
     let url = "https://api.github.com/search/repositories?q=" + search + "&sort=stars&order=desc";
-    fetch(url, {
+    const options = {
       method: 'GET',
-      headers: {
-        'Authorization': authorization,
-        'Accept': 'application/vnd.github.v3+json' 
+      headers: headers
+    };
+    try{
+      const response = await fetch(url, options);
+      if (!response.ok){
+        throw Error("Could not fetch any data..");
+      }else{
+        const result = await response.json();
+        setIsPending(false);
+        navigate("/search-results",{
+          state: {
+            results: result
+          }
+        });
+        console.log(result);
+      }
+    }catch(err){
+      console.log(err);
     }
-    }).then(res => {
-        if (!res.ok){
-          throw Error("Could not fetch any data..");
-        }
-        return res.json();
-      }).then((data) => {
-          setIsPending(false);
-          
-          navigate("/search-results",{
-            state: {
-              results: data
-            }
-          });
-          
-          console.log(data);
-      }).catch(err => {
-      
-      });
   }
   return (
     <div className="">

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Success from "../../alert/Success";
 
-const CreateUserProject = ({authorization}) => {
+function CreateUserProject({headers}){
     
     const [proj, setProj] = useState('');
     const [message, setMessage] = useState(null);
@@ -10,10 +10,7 @@ const CreateUserProject = ({authorization}) => {
         const url = "https://api.github.com/user/projects";
         fetch(url, {
                         method: 'POST', // or ‘PUT’
-                        headers: {
-                            'Authorization': authorization,
-                            'Accept': 'application/vnd.github.v3+json' 
-                        },
+                        headers: headers,
                         body: JSON.stringify({
                             'name': proj
                         })
@@ -35,7 +32,7 @@ const CreateUserProject = ({authorization}) => {
     
     return ( 
         <div className="" onSubmit={(e)=>{e.preventDefault();}}>
-            <h1 className="mb-5">Create projsitory</h1>
+            <h2 className="mb-5">Create User Project</h2>
             <form action="">
                 <div className="for-group mb-4">
                     <input type="text" className="form-control" placeholder="Project name" value={proj} onChange={(e)=>{setProj(e.target.value)}}/>
