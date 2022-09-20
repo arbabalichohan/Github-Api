@@ -10,7 +10,8 @@ function Results(){
             <h2 className="bg-secondary text-light py-3">Repositories</h2>
             {results && results.items.map(result => (
                 <div className="border text-start py-2 px-3" key={result.id}>
-                    
+                    {/* <Link to="">{result.name}</Link> */}
+
                     <a href={`https://github.com/${result.full_name}`} target="_blank">
                             {result.name}
                         </a>
